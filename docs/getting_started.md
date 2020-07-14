@@ -58,6 +58,8 @@ scons -j4
 
 ![console](img/console.png)
 
+除此之外，还可以在VS Code中运行`fmt_fmu/target/pixhawk/mavlink_shell.py`脚本来连接console。
+
 ### 下载FMT IO固件
 协处理器IO的固件通过FMU的文件系统进行下载。首先需要连接将编译的`fmt_io.bin`固件放到sd卡上，可以通过读卡器拷贝。而更方便的方式是通过QGC的FTP功能进行文件上传 (*Widget->Onboard Files*)。
 
