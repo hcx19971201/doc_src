@@ -1,4 +1,6 @@
-# 硬件连接
+# 快速上手
+
+## 硬件连接
 ![hardware](img/hardware.png)
 
 硬件连接如图所示:
@@ -12,7 +14,7 @@
 - `AUX OUT`: 支持最多6路PWM输出信号 (也可改为捕获输入信号)。
 - `其它`：其它接口暂时还未支持。
 
-# 编译环境
+## 编译环境
 支持在Windows/Linux/Mac环境下编译，需要用到的工具链如下：
 
 - **编译器**: [*arm-none-eabi- toolchain*](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) (推荐版本: `7-2018-q2-update`，其它版本未测试)
@@ -20,29 +22,29 @@
 - **编辑器**：推荐*VS Code*。使用*VS Code*打开`FMT_Firmware/fmt_fmu`或者`FMT_Firmware/fmt_io`目录即可打开项目工程。
 - **USB驱动**：下载 [STM32 USB驱动](https://www.st.com/en/development-tools/stsw-stm32102.html) (For windows)
 
-# 编译固件
+## 编译固件
 在配置好了编译环境后，首先需要配置系统的环境变量。以Windows系统为例，进入*Environment Variables*界面，添加一个`RTT_EXEC_PATH`的环境变量，并且将其*Value*设置为*arm-none-eabi- toolchain*的下载地址，比如`D:\gcc-arm-none-eabi-7-2018-q2-update-win32\bin`。
 
 同时，在命令行窗口中输入`scons --version`和`python --version`查看版本是否正常。完成以上步骤后，可以开始编译FMT固件。
 
-- 编译**FMT FMU**固件
+### 编译**FMT FMU**固件
 ```
 cd FMT_Firmware/fmt_fmu/target/pixhawk
 scons -j4
 ```
 编译完成后，固件`fmt_fmu.bin`将生成在*build*目录下。
 
-- 编译**FMT IO**固件
+### 编译**FMT IO**固件
 ```
 cd FMT_Firmware/fmt_io/Project
 scons -j4
 ```
 编译完成后，固件`fmt_io.bin`将生成在*build*目录下。
 
-# 固件下载
+## 固件下载
 FMT包含FMU (Flight Management Uinit) 固件和IO (Input/Output)固件，需要分别进行下载。FMT使用pixhawk内置的bootloader进行固件的下载，所以在下载了FMT的固件后，也能够很方便的刷回PX4或者APM的固件。
 
-## 下载FMT FMU固件
+### 下载FMT FMU固件
 目前有两种方式下载FMU固件: 通过uploader.py脚本下载或者通过QGroundControl (QGC)下载。
 
 - **uploader.py脚本：**
@@ -59,7 +61,7 @@ FMT包含FMU (Flight Management Uinit) 固件和IO (Input/Output)固件，需要
 
 除此之外，还可以在VS Code中运行`fmt_fmu/target/pixhawk/mavlink_shell.py`脚本来连接console。
 
-## 下载FMT IO固件
+### 下载FMT IO固件
 协处理器IO的固件通过FMU的文件系统进行下载。首先需要连接将编译的`fmt_io.bin`固件放到sd卡上，可以通过读卡器拷贝。而更方便的方式是通过QGC的FTP功能进行文件上传 (*Widget->Onboard Files*)。
 
 文件上传后，进入控制台(console)，输入如下指令:
@@ -70,19 +72,19 @@ uploader $path/fmt_io.bin
 
 **注意：**如果是第一次下载IO固件，在输入`uploader`指令后，需要手动按一下位于**Pixhawk**右侧的IO复位按钮，使得IO进入bootloader程序。
 
-## 刷回PX4固件
+### 刷回PX4固件
 首先同样利用**QGC**地面站下载PX4/APM的固件到FMU。 PX4在上电会检查IO的固件版本并进行更新。但是由于目前FMT IO还不识别PX4的重启指令，故无法重启进入bootloader模式，所以需要手动进行IO固件的下载，目前有两种方法：
 
 1. 按住安全开关 (safety switch)， 然后给飞控上电，这时候IO将会停留在bootloader中，这时候再按照之前的步骤刷新PX4/APM的固件到FMU。当FMU固件更新成功后，IO固件也将自动进行更新。
 2. 在刷了FMU固件后，进入nsh的控制台，输入指令`px4io forceupdate 14662 /etc/extras/px4_io-v2_default.bin`，在输入完指令后，立马按下IO的复位键，则可以开始IO固件的烧写。
 
-# 代码调试
+## 代码调试
 FMT提供了丰富的调试手段，常用的比如通过console打印，log日志记录以及jtag连接进行单独调试。
 
-## Console打印
+### Console打印
 在FMU中可以调用`console_printf()`函数进行打印，用法类似`printf()`。信息将被打印显示在*console*设备上，支持中断上下文中打印。
 
-## ULOG日志
+### ULOG日志
 ULOG为rt-thread提供的文字日志系统，支持不同level等级的日志信息输出，比如*Error*,*Warning*,*Info*,*Debug*等，对应的函数接口为：
 ```
 ulog_e(TAG, ...)	// Error
@@ -99,5 +101,5 @@ ulog_e("Test", "Hello, this is %s", "FMT");
 [1770] E/Test: Hello, this is FMT
 ```
 
-## JTAG调试
+### JTAG调试
 TO BE ADD

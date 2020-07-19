@@ -1,11 +1,16 @@
 site_name: Firmament Autopilot
+repo_url: https://github.com/FirmamentPilot/doc_src
 nav:
-    - 概述: index.md
-    - 快速上手: getting_started.md
-    - 硬件: hardware.md
-    - 驱动和设备: device.md
-    - 组件: module.md
-    - 模型合入: mbd.md
-    - 仿真: simulation.md
-    - 贡献: contribute.md
-theme: readthedocs
+- 概述: index.md
+- 快速上手: getting_started.md
+- 驱动和设备: device.md
+- 组件: module.md
+- 模型合入: mbd.md
+- 仿真: simulation.md
+- 贡献: contribute.md
+    
+theme: 
+    name: 'rtd-dropdown'
+plugins:
+    - search
+
