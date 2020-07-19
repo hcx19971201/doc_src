@@ -10,7 +10,7 @@ nav:
 - 贡献: contribute.md
     
 theme: 
-    name: 'rtd-dropdown'
+    name: rtd-dropdown
 plugins:
     - search
 
