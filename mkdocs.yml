@@ -10,7 +10,5 @@ nav:
 - 贡献: contribute.md
     
 theme: 
-    name: rtd-dropdown
-plugins:
-    - search
+    name: readthedocs
 

@@ -36,7 +36,7 @@ scons -j4
 
 ### 编译**FMT IO**固件
 ```
-cd FMT_Firmware/fmt_io/Project
+cd FMT_Firmware/fmt_io/project
 scons -j4
 ```
 编译完成后，固件`fmt_io.bin`将生成在*build*目录下。
