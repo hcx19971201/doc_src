@@ -56,7 +56,7 @@ typedef struct {
 ```c
 MCN_DEFINE(my_mcn_topic, sizeof(test_data));
 ```
-这里`my_mcn_topic`为该消息的名字，`sizeof(test_data)`为消息内容的长度。uMCN对消息的长度和类型没有限制，所以理论上可以用uMCN传递任意消息类型。但是注意，同一个消息(名称)不可被重复定义，不然编译时会报重复定义的错误。
+这里`my_mcn_topic`为该消息的名字，`sizeof(test_data)`为消息内容的长度。uMCN对消息的长度和类型没有限制，所以理论上可以用uMCN传递任意消息类型。同时uMCN支持一个消息同时有多个发布者 (publisher) 和订阅者 (subscriber)。但是注意，同一个消息(名称)不可被重复定义，不然编译时会报重复定义的错误。
 
 - 注册消息：调用`mcn_advertise`函数注册该条消息：
 ```c
@@ -84,7 +84,7 @@ MCN_DECLARE(my_mcn_topic);
 ```
 
 - 订阅消息：调用`mcn_subscribe(McnHub* hub, MCN_EVENT_HANDLE event_t, void (*cb)(void* parameter))`函数来订阅消息。
-其中`cb`为消息发布的回调函数，在每次发布消息时，回调函数将被调用。 **注意：**回调函数将在发布消息的线程中被调用。`event_t`为用于消息同步的事件句柄，这里一般用系统的信号量(semaphore)实现。当订阅成功后，函数将返回消息节点句柄`McnNode_t`。
+其中`cb`为消息发布的回调函数，在每次发布消息时，回调函数将被调用 (注意: 回调函数将在发布消息的线程中被调用)。`event_t`为用于消息同步的事件句柄，这里一般用系统的信号量(semaphore)实现。当订阅成功后，函数将返回消息节点句柄`McnNode_t`。
 
 这里分别对同步/异步的消息订阅举例：
 
@@ -171,8 +171,9 @@ gyr:-0.001078 0.002592 -0.003151 acc:-0.040336 0.019121 -9.748902
 `mcn echo`指令支持`-c`和`-p`的Option来设置消息打印的**条数**和**频率**，默认打印频率500ms。 如果要打印10条消息，打印频率为100ms，可以输入`mcn echo -c=10 -p=100 sensor_mag`。
 
 ## Param参数模块
-param模块为系统提供参数功能，包括参数的定义，读取，存储和修改等。参数信息文件形式存储在存储设备上，如SD卡。存储路径默认为`/sys/param.xml`或者`/sys/hil_param.xml`(开启了HIL模式)。
+param模块为系统提供参数功能，包括参数的定义，读取，存储和修改等。参数以文件形式存储在存储设备上，如SD卡。存储路径默认为`/sys/param.xml`或者`/sys/hil_param.xml` (HIL模式)。
 系统上电会自动读取默认路径下的参数文件。若参数文件不存在，则使用默认的参数值。如果开启了`blog`日志记录，参数也会被记录到日志中，供仿真模型读取。目前支持的参数类型包括
+
 ```c
 enum param_type_t {
 	PARAM_TYPE_INT8 = 0,
@@ -189,7 +190,7 @@ enum param_type_t {
 ### 定义参数
 在定义参数之前，有必要先了解一下FMT中参数的组织方式。FMT的参数以组(Group)为单位对参数进行组织，每个组可以包含一到任意多个参数。
 
-举例说明，定义一个新的*float*类型的参数`my_param1`和*uint32*类型的参数`my_param2`，它们都属于同一个组`my_group`可以按照如下步骤：
+举例说明，定义一个新的*float*类型的参数`my_param1`和*uint32*类型的参数`my_param2`，它们都属于同一个组`my_group`，则可以按照如下步骤定义：
 
 - 申明Group： 在`param.h`中申明新的组`my_group`
 ```c
@@ -225,10 +226,10 @@ PARAM_GROUP(my_group) PARAM_DECLARE_GROUP(my_group) = \
 	PARAM_DEFINE_UINT32(my_param2, 1),
 };
 ```
-这里定义了两个新的参数`my_param1`（默认值0.5）和`my_param2`（默认值1）。如果是在已有Group中添加新的参数，那么则可以省去步骤1和步骤2.
+这里定义了两个新的参数`my_param1`（默认值0.5）和`my_param2`（默认值1）。**如果是在已有Group中添加新的参数，那么则可以省去步骤1和步骤2**.
 
 ### 读取参数
-param模块提供了如下宏定义来快速获取参数的值 (非查询模式)。用户需要选择匹配参数类型的宏并传入参数的组名称和参数名称. 
+Param模块提供了如下宏定义来快速获取参数的值 (非查询模式)。用户需要选择匹配参数类型的宏并传入参数的组名称和参数名称. 
 ```c
 #define PARAM_GET_INT8(_group, _name)
 #define PARAM_GET_UINT8(_group, _name)
@@ -345,8 +346,7 @@ FMS日志模块提供了两种类型的日志, **BLog** (Binary Log) 和**ULog**
 #### 添加日志数据
 这里以`IMU`日志数据为例, 演示如何添加新的日志数据.
 
-1. 定义Element
-使用宏`BLOG_ELEMENT(_name, _type)`来定义一个Element，其中`_name`为Element名称，`_type`为Element类型，目前支持的类型如下：
+- 定义Element：使用宏`BLOG_ELEMENT(_name, _type)`来定义一个Element，其中`_name`为Element名称，`_type`为Element类型，目前支持的类型如下：
 ```c
 enum {
 	BLOG_INT8 = 0,
@@ -383,8 +383,7 @@ blog_elem_t IMU_elems[] = {
 };
 ```
 
-2. 定义Bus:
-使用宏`BLOG_BUS(_name, _id, _elem_list)`将新的Bus添加到`_blog_bus`列表中。其中`_name`为Bus名称；`_id`为该条Bus的ID，用来唯一指代这条Bus数据；IMU_elems为Bus的Element数据。比如：
+- 定义Bus：使用宏`BLOG_BUS(_name, _id, _elem_list)`将新的Bus添加到`_blog_bus`列表中。其中`_name`为Bus名称；`_id`为该条Bus的ID，用来唯一指代这条Bus数据；IMU_elems为Bus的Element数据。比如：
 ```c
 blog_bus_t _blog_bus[] = {
     BLOG_BUS("IMU", BLOG_IMU_ID, IMU_elems),
