@@ -66,11 +66,18 @@ FMT包含FMU (Flight Management Uinit) 固件和IO (Input/Output)固件，需要
 
 文件上传后，进入控制台(console)，输入如下指令:
 ```
-uploader $path/fmt_io.bin
+fmtio upload $path/fmt_io.bin
 ```
 其中`$path`为存放*fmt_io.bin*的路径，如果是放在根目录，则可以省略，直接输入`uploader`即可。
 
-**注意：**如果是第一次下载IO固件，在输入`uploader`指令后，需要手动按一下位于**Pixhawk**右侧的IO复位按钮，使得IO进入bootloader程序。
+**注意：**如果是第一次下载IO固件，在输入`upload`指令后，需要手动按一下位于**Pixhawk**右侧的IO复位按钮，使得IO进入bootloader程序。
+
+下载完成后，在控制台输入`fmtio hello`指令，如果IO固件更新成功，应该看到IO发来的如下消息：
+
+```shell
+msh />fmtio hello
+msh />[IO]:Hello, this is FMT IO!
+```
 
 ### 刷回PX4固件
 首先同样利用**QGC**地面站下载PX4/APM的固件到FMU。 PX4在上电会检查IO的固件版本并进行更新。但是由于目前FMT IO还不识别PX4的重启指令，故无法重启进入bootloader模式，所以需要手动进行IO固件的下载，目前有两种方法：
