@@ -1,13 +1,15 @@
 # 概述
 
 ## Firmament概述
-Firmament (FMT) 是一款专为基于模型开发 (MBD, Model Based Design) 而设计的开源飞控系统。FMT主要包括两部分：
+Firmament (FMT) 是首个全面支持基于模型设计 (Model-Based Design， 简称MBD) 模式的开源自驾仪。基于模型设计省去了繁琐的代码编写步骤，结合 Matlab/Simulink 强大的算法仿真和代码生成功能，通过可视化的方式就能轻松搭建算法模块。开发人员可以将更多的精力放在算法本身，而不需要过多关注代码实现的细节，这样将大大加快开发的效率，减少在代码编写过程中产生的错误。
+
+Firmament 主要包括两部分：
 
 - [FMT Firmware](https://github.com/FirmamentPilot/FMT_Firmware)：嵌入式飞控系统。提供安全稳定的嵌入式功能以及针对MBD开发而需要的功能模块和系统框架。
 - [FMT Model](https://github.com/FirmamentPilot/FMT_Model)：基于模型设计的算法模块。可以直接生成C/C++源码并嵌入飞控系统中。除此之外，FMT Model还提供强大的仿真功能，如模型在环仿真 (MIL)，硬件在环仿真 (HIL) 和开环仿真 (Open Loop Simulation)。
 
 ### FMT Firmware
-FMT Firmware主要用C语言编写，代码简洁易用。高度模块化的架构设计，使得代码移植和算法模块替换变得简单。FMT飞控基于Pixhawk V2的硬件进行开发，包括FMU(stm32F427)和IO(stm32F103)两个部分的固件。FMT支持Mavlink 1.0/2.0，所以可以支持主流的地面站，如QGC等。除此之外，FMT与其它主要开源飞控的主要区别之一在于其高度契合MBD的开发模式，能够基于Simulink快速设计，部署和验证你的算法模块。
+FMT Firmware主要用C语言编写，代码简洁易用。高度模块化的架构设计，使得代码移植和算法模块替换变得简单。Firmament 飞控基于Pixhawk V2的硬件进行开发 (未来将移植到更多硬件平台上)，包括FMU(stm32F427)和IO(stm32F103)两个部分的固件。FMT支持Mavlink 1.0/2.0，所以可以支持主流的地面站，如QGC等。除此之外，FMT与其它主要开源飞控的主要区别之一在于其高度契合MBD的开发模式，能够基于Simulink快速设计，部署和验证你的算法模块。
 
 ### FMT Model
 FMT Model为Simulink编写的算法模块，对于飞控系统来说，主要包含导航系统(INS)，飞行管理系统(FMS)和控制系统(Controller)三大算法模块。FMT Model通过Simulink Embedded Coder生成C/C++代码，只需简单copy到FMT Firmware相关模块中，即可完成算法的嵌入，而无需修改飞控的代码 (只要遵循FMT Model Interface标准)。FMT Model还包含无人机的物理模型(Plant)，从而可以支持模型在环仿真(MIL)和硬件在环仿真(HIL)，其它模型，如固定翼，VTOL等模型也会逐渐支持 (欢迎大家贡献！)。结合飞控系统的实时日志功能，可以将日志数据导入模型进行开环仿真(Open Loop Simulation)，得到和在硬件上运行完全一致的仿真结果。

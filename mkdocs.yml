@@ -3,9 +3,10 @@ repo_url: https://github.com/FirmamentPilot/doc_src
 nav:
 - 概述: index.md
 - 快速上手: getting_started.md
-- 驱动和设备: device.md
+- 设备和驱动: device.md
 - 组件: module.md
-- 模型合入: mbd.md
+- 基于模型设计: mbd.md
+- 模型接口定义: interface.md
 - 仿真: simulation.md
 - 贡献: contribute.md
     
