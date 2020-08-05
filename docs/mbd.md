@@ -7,7 +7,7 @@
 
 Firmament 的开环仿真模型结构如下图所示：
 
-![model](img\model.png)
+![model](img/model.png)
 
 Firmament 的模型主要由四个大的算法模块组成：
 
