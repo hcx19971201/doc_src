@@ -340,7 +340,8 @@ param get [group] <parameter>
 
 FMS日志模块提供了两种类型的日志, **BLog** (Binary Log) 和**ULog** (Micro Log) , 分别提供**二进制日志**数据记录和**文字日志**数据记录的功能。
 
-### BLog日志
+### <span id="BLog">BLog日志</span>
+
 首先有必要了解一下BLog记录日志的结构。BLog记录的日志以**Bus** (类似Simulink中Bus的概念)为单位，其中每个Bus又包含一个或者多个**Element**(类似Simulink中Element的概念)。所以BLog日志文件可以直接解析为Simulink可以使用的Bus数据，供模型进行仿真。下面同样举例说明BLog日志的用法。
 
 #### 添加日志数据

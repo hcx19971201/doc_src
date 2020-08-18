@@ -7,7 +7,7 @@ nav:
 - 组件: module.md
 - 基于模型设计: mbd.md
 - 模型接口定义: interface.md
-- 仿真: simulation.md
+- 设计新模型: custom_model.md
 - 贡献: contribute.md
     
 theme: 
